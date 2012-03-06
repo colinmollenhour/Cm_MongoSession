@@ -2,7 +2,7 @@
 /**
  * MongoDb session handler with locking
  */
-class Cm_Mongo_Model_Mysql4_Session extends Mage_Core_Model_Mysql4_Session
+class Cm_Session_Model_Mongo_Session extends Mage_Core_Model_Mysql4_Session
 {
     const BREAK_AFTER = 15;
     const FAIL_AFTER = 20;
@@ -167,7 +167,7 @@ class Cm_Mongo_Model_Mysql4_Session extends Mage_Core_Model_Mysql4_Session
         if( ! $this->_useMongo) return parent::destroy($sessId);
 
         $this->_coll->remove(array('_id' => $sessId));
-        return true;
+        return TRUE;
     }
 
     /**
@@ -181,11 +181,10 @@ class Cm_Mongo_Model_Mysql4_Session extends Mage_Core_Model_Mysql4_Session
         if( ! $this->_useMongo) return parent::gc($sessMaxLifeTime);
 
         if ($this->_automaticCleaningFactor > 0) {
-            if ($this->_automaticCleaningFactor == 1 ||
-                rand(1, $this->_automaticCleaningFactor)==1) {
-                $this->_coll->remove(array('expires' => array('$lt' => time())), array('multiple' => TRUE));
+            if ($this->_automaticCleaningFactor == 1 || rand(1, $this->_automaticCleaningFactor)==1) {
+                $this->_coll->remove(array('expires' => array('$lt' => time())));
             }
         }
-        return true;
+        return TRUE;
     }
 }
